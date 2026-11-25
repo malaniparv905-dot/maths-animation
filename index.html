@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline Studio — Gaussian Elimination Cinematic Explainer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-badge">TIMELINE STUDIO</div>
+      <div class="project-title">Cinematic 3D Mathematics Explainer — Gaussian Elimination (5:00)</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="btnToggleHUD">Toggle HUD</button>
+      <button class="btn" id="btnExportJSON">Save Timeline</button>
+      <button class="btn btn-primary" id="btnRenderVideo">Render 1080p MP4</button>
+    </div>
+  </header>
+
+  <!-- Workspace -->
+  <div class="workspace">
+    <!-- Viewport Area -->
+    <div class="viewport-area">
+      <div class="canvas-container">
+        <canvas id="renderCanvas" width="1920" height="1080"></canvas>
+      </div>
+    </div>
+
+    <!-- Inspector Panel -->
+    <div class="inspector-panel">
+      <div class="panel-header">
+        <span>TIMELINE INSPECTOR</span>
+        <span id="activeSceneBadge" style="color:#00f0ff; font-family:'JetBrains Mono', monospace;">SCENE 1</span>
+      </div>
+
+      <!-- Jump to Scene -->
+      <div class="panel-section">
+        <div class="section-title">Timeline Scenes (300.0s Total)</div>
+        <div class="scene-list" id="sceneListContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Mathematical Data -->
+      <div class="panel-section">
+        <div class="section-title">System of Equations & Solution</div>
+        <div style="background:var(--bg-tertiary); padding:12px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:12px; line-height:1.7;">
+          <div style="color:#00f0ff;">Plane 1: x + y = 5  (Order 1)</div>
+          <div style="color:#9d4edd;">Plane 2: x + z = 8  (Order 2)</div>
+          <div style="color:#ff9e00;">Plane 3: y + z = 7  (Order 3)</div>
+          <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); color:#00f59b; font-weight:bold;">
+            Triple Intersection: (3, 2, 5)<br>
+            Coffee: ₹3 | Tea: ₹2 | Sandwich: ₹5
+          </div>
+        </div>
+      </div>
+
+      <!-- Reference Inspiration Images -->
+      <div class="panel-section">
+        <div class="section-title">Visual References (Design Inspiration)</div>
+        <div class="ref-images-grid">
+          <div>
+            <img class="ref-thumb" src="assets/references/ref1_cafeteria.jpg" alt="Cafeteria Inspiration" onclick="window.open(this.src)">
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Ref 1: Cafeteria</div>
+          </div>
+          <div>
+            <img class="ref-thumb" src="assets/references/ref2_math_space.jpg" alt="Math Space Inspiration" onclick="window.open(this.src)">
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Ref 2: Math Space</div>
+          </div>
+          <div>
+            <img class="ref-thumb" src="assets/references/ref3_matrix_operations.jpg" alt="Matrix Operations" onclick="window.open(this.src)">
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Ref 3: Matrix HUD</div>
+          </div>
+          <div>
+            <img class="ref-thumb" src="assets/references/ref4_matrix_staircase.jpg" alt="Digital Staircase" onclick="window.open(this.src)">
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Ref 4: Staircase</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Controls Section -->
+  <div class="timeline-section">
+    <!-- Transport Controls -->
+    <div class="transport-controls">
+      <div class="transport-buttons">
+        <button class="btn" id="btnRewind">|◀</button>
+        <button class="btn" id="btnBack5">-5s</button>
+        <button class="play-btn" id="btnPlayPause">▶</button>
+        <button class="btn" id="btnForward5">+5s</button>
+        <button class="btn" id="btnSpeed">1.0x</button>
+      </div>
+
+      <div class="timecode-display" id="timecodeDisplay">00:00.00 / 05:00.00</div>
+
+      <div style="font-size:12px; color:var(--text-muted);">
+        Click or drag on timeline to scrub • Space to play/pause
+      </div>
+    </div>
+
+    <!-- Timeline Tracks -->
+    <div class="timeline-tracks-area" id="timelineTracksArea">
+      <!-- Ruler -->
+      <div class="ruler-bar" id="timelineRuler"></div>
+
+      <!-- Playhead indicator -->
+      <div class="playhead-line" id="playheadLine" style="left: 140px;">
+        <div class="playhead-head"></div>
+      </div>
+
+      <!-- Track Rows -->
+      <div class="track-row">
+        <div class="track-label">SCENES</div>
+        <div class="track-content" id="trackScenes"></div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label">VISUAL / 3D</div>
+        <div class="track-content" id="trackVisual"></div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label">MATH & MATRIX</div>
+        <div class="track-content" id="trackMath"></div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label">TEXT & NARRATIVE</div>
+        <div class="track-content" id="trackText"></div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label">AUDIO (VOICE/MUSIC)</div>
+        <div class="track-content" id="trackAudio"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="timelineData.js"></script>
+  <script src="src/math3d.js"></script>
+  <script src="src/scene1_cafeteria.js"></script>
+  <script src="src/scene2_transform.js"></script>
+  <script src="src/scene3_geometry3d.js"></script>
+  <script src="src/scene4_matrix_intro.js"></script>
+  <script src="src/scene5_elimination.js"></script>
+  <script src="src/scene6_graph_bridge.js"></script>
+  <script src="src/scene7_staircase.js"></script>
+  <script src="src/mainRenderer.js"></script>
+
+  <script>
+    let timelineConfig = window.TIMELINE_CONFIG || null;
+    let renderer = null;
+    let canvas = document.getElementById('renderCanvas');
+    let ctx = canvas.getContext('2d');
+    window.ctx = ctx;
+
+    let currentTime = 0.0;
+    let isPlaying = false;
+    let playbackSpeed = 1.0;
+    let lastAnimTime = 0;
+    let showHUD = true;
+    const bgScore = new Audio('assets/cinematic_ambient_score.wav');
+    bgScore.volume = 0.35; // Mild background tone
+
+    function startApp(config) {
+      timelineConfig = config;
+      renderer = new MainRenderer(timelineConfig);
+      window.renderer = renderer;
+      initUI();
+      seek(0.0);
+    }
+
+    if (timelineConfig) {
+      startApp(timelineConfig);
+    } else {
+      fetch('timeline.json')
+        .then(res => res.json())
+        .then(data => startApp(data));
+    }
+
+    function initUI() {
+      buildSceneList();
+      buildTimelineTracks();
+      setupEvents();
+    }
+
+    function buildSceneList() {
+      const container = document.getElementById('sceneListContainer');
+      container.innerHTML = '';
+      timelineConfig.scenes.forEach((s, idx) => {
+        const item = document.createElement('div');
+        item.className = 'scene-item' + (idx === 0 ? ' active' : '');
+        item.id = 'scene-btn-' + s.id;
+        item.innerHTML = `
+          <div class="scene-item-title">
+            <span>${idx + 1}. ${s.name}</span>
+            <span class="scene-item-time">${formatTime(s.startTime)} - ${formatTime(s.endTime)}</span>
+          </div>
+          <div class="scene-item-desc">${s.inspiration || s.tracks.backgroundTrack.type}</div>
+        `;
+        item.onclick = () => seek(s.startTime);
+        container.appendChild(item);
+      });
+    }
+
+    function buildTimelineTracks() {
+      const trackScenes = document.getElementById('trackScenes');
+      const trackVisual = document.getElementById('trackVisual');
+      const trackMath = document.getElementById('trackMath');
+      const trackText = document.getElementById('trackText');
+      const trackAudio = document.getElementById('trackAudio');
+
+      trackScenes.innerHTML = '';
+      const totalDur = timelineConfig.project.totalDuration;
+
+      timelineConfig.scenes.forEach(s => {
+        const leftPercent = (s.startTime / totalDur) * 100;
+        const widthPercent = (s.duration / totalDur) * 100;
+
+        // Scene Block
+        const bScene = document.createElement('div');
+        bScene.className = `scene-block ${s.id}`;
+        bScene.style.left = `${leftPercent}%`;
+        bScene.style.width = `${widthPercent}%`;
+        bScene.innerText = s.name;
+        bScene.title = `${s.name} (${formatTime(s.startTime)} - ${formatTime(s.endTime)})`;
+        bScene.onclick = (e) => { e.stopPropagation(); seek(s.startTime); };
+        trackScenes.appendChild(bScene);
+
+        // Visual track block
+        const bVis = document.createElement('div');
+        bVis.className = 'scene-block';
+        bVis.style.left = `${leftPercent}%`;
+        bVis.style.width = `${widthPercent}%`;
+        bVis.style.background = 'rgba(0, 240, 255, 0.15)';
+        bVis.style.borderColor = 'rgba(0, 240, 255, 0.4)';
+        bVis.innerText = s.tracks.backgroundTrack.type;
+        trackVisual.appendChild(bVis);
+
+        // Math track block
+        const bMath = document.createElement('div');
+        bMath.className = 'scene-block';
+        bMath.style.left = `${leftPercent}%`;
+        bMath.style.width = `${widthPercent}%`;
+        bMath.style.background = 'rgba(157, 78, 221, 0.15)';
+        bMath.style.borderColor = 'rgba(157, 78, 221, 0.4)';
+        bMath.innerText = s.tracks.mathVisualizationTrack.type;
+        trackMath.appendChild(bMath);
+
+        // Text track block
+        const bText = document.createElement('div');
+        bText.className = 'scene-block';
+        bText.style.left = `${leftPercent}%`;
+        bText.style.width = `${widthPercent}%`;
+        bText.style.background = 'rgba(255, 158, 0, 0.15)';
+        bText.style.borderColor = 'rgba(255, 158, 0, 0.4)';
+        bText.innerText = `${s.tracks.textTrack.length} Titles`;
+        trackText.appendChild(bText);
+
+        // Audio track block
+        const bAudio = document.createElement('div');
+        bAudio.className = 'scene-block';
+        bAudio.style.left = `${leftPercent}%`;
+        bAudio.style.width = `${widthPercent}%`;
+        bAudio.style.background = 'rgba(0, 245, 155, 0.12)';
+        bAudio.style.borderColor = 'rgba(0, 245, 155, 0.4)';
+        bAudio.innerText = `Cinematic Ambient Score (Mild, -22dB)`;
+        trackAudio.appendChild(bAudio);
+      });
+    }
+
+    function setupEvents() {
+      const playBtn = document.getElementById('btnPlayPause');
+      playBtn.onclick = togglePlay;
+
+      document.getElementById('btnBack5').onclick = () => seek(currentTime - 5.0);
+      document.getElementById('btnForward5').onclick = () => seek(currentTime + 5.0);
+      document.getElementById('btnRewind').onclick = () => seek(0.0);
+
+      const speedBtn = document.getElementById('btnSpeed');
+      const speeds = [1.0, 1.5, 2.0, 0.5];
+      let sIdx = 0;
+      speedBtn.onclick = () => {
+        sIdx = (sIdx + 1) % speeds.length;
+        playbackSpeed = speeds[sIdx];
+        speedBtn.innerText = playbackSpeed.toFixed(1) + 'x';
+      };
+
+      document.getElementById('btnToggleHUD').onclick = () => {
+        showHUD = !showHUD;
+        render();
+      };
+
+      document.getElementById('btnExportJSON').onclick = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(timelineConfig, null, 2));
+        const dlAnchor = document.createElement('a');
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", "timeline.json");
+        dlAnchor.click();
+      };
+
+      document.getElementById('btnRenderVideo').onclick = () => {
+        alert("To render the full 5-minute MP4 video, run:\nnode render.js\nin your terminal. It will batch render all 7 scenes and assemble the final 1080p MP4!");
+      };
+
+      // Timeline Scrubber Click & Drag
+      const tracksArea = document.getElementById('timelineTracksArea');
+      let isDragging = false;
+
+      function handleScrub(e) {
+        const rect = tracksArea.getBoundingClientRect();
+        const labelW = 140; // Track label width
+        const clientX = e.clientX - rect.left;
+        if (clientX < labelW) return;
+        const norm = Math.max(0, Math.min(1, (clientX - labelW) / (rect.width - labelW)));
+        seek(norm * timelineConfig.project.totalDuration);
+      }
+
+      tracksArea.onmousedown = (e) => {
+        isDragging = true;
+        handleScrub(e);
+      };
+      window.onmousemove = (e) => {
+        if (isDragging) handleScrub(e);
+      };
+      window.onmouseup = () => {
+        isDragging = false;
+      };
+
+      // Keyboard space to play/pause
+      window.onkeydown = (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          togglePlay();
+        } else if (e.code === 'ArrowLeft') {
+          seek(currentTime - 2.0);
+        } else if (e.code === 'ArrowRight') {
+          seek(currentTime + 2.0);
+        }
+      };
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      document.getElementById('btnPlayPause').innerText = isPlaying ? '⏸' : '▶';
+      if (isPlaying) {
+        lastAnimTime = performance.now();
+        bgScore.currentTime = currentTime;
+        bgScore.playbackRate = playbackSpeed;
+        bgScore.play().catch(() => {}); // Audio play gracefully handles browser autoplay policy
+        requestAnimationFrame(animLoop);
+      } else {
+        bgScore.pause();
+      }
+    }
+
+    function animLoop(now) {
+      if (!isPlaying) return;
+      const dt = (now - lastAnimTime) / 1000.0;
+      lastAnimTime = now;
+
+      currentTime += dt * playbackSpeed;
+      if (currentTime >= timelineConfig.project.totalDuration) {
+        currentTime = timelineConfig.project.totalDuration;
+        isPlaying = false;
+        bgScore.pause();
+        document.getElementById('btnPlayPause').innerText = '▶';
+      }
+
+      seek(currentTime, false);
+      if (isPlaying) requestAnimationFrame(animLoop);
+    }
+
+    function seek(t, reRender = true) {
+      currentTime = Math.max(0, Math.min(timelineConfig.project.totalDuration, t));
+      if (!isPlaying) {
+        bgScore.currentTime = currentTime;
+      }
+      render();
+      updateUI();
+    }
+
+    function render() {
+      if (!renderer) return;
+      renderer.renderAtTime(ctx, currentTime, 1920, 1080, { showHUD });
+    }
+
+    function updateUI() {
+      // Timecode
+      const min = Math.floor(currentTime / 60);
+      const sec = Math.floor(currentTime % 60);
+      const ms = Math.floor((currentTime % 1) * 100);
+      document.getElementById('timecodeDisplay').innerText = 
+        `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}.${String(ms).padStart(2, '0')} / 05:00.00`;
+
+      // Playhead Position
+      const totalDur = timelineConfig.project.totalDuration;
+      const tracksArea = document.getElementById('timelineTracksArea');
+      const labelW = 140;
+      const trackW = tracksArea.clientWidth - labelW;
+      const playheadX = labelW + (currentTime / totalDur) * trackW;
+      document.getElementById('playheadLine').style.left = `${playheadX}px`;
+
+      // Highlight active scene in list
+      const activeScene = timelineConfig.scenes.find(s => currentTime >= s.startTime && currentTime < s.endTime) || timelineConfig.scenes[timelineConfig.scenes.length - 1];
+      document.getElementById('activeSceneBadge').innerText = activeScene.name.toUpperCase();
+
+      document.querySelectorAll('.scene-item').forEach(el => el.classList.remove('active'));
+      const activeBtn = document.getElementById('scene-btn-' + activeScene.id);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function formatTime(s) {
+      const min = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>
