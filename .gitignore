@@ -2,3 +2,5 @@ node_modules/
 output/*.mp4
 .DS_Store
 *.log
+scratch/
+voice_synced.wav

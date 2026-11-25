@@ -23,8 +23,8 @@ class Scene5Elimination {
   }
 
   render(ctx, time, width = 1920, height = 1080) {
-    // Local time in scene: 0.0 to 120.0 (Global 150.0 to 270.0)
-    const t = Math.max(0, Math.min(120.0, time));
+    // Local time in scene: 0.0 to 147.0 (Global 97.0 to 244.0)
+    const t = Math.max(0, Math.min(147.0, time));
 
     // 1. Deep Blueprint Cyber Background
     this.drawBackground(ctx, t, width, height);
@@ -32,26 +32,22 @@ class Scene5Elimination {
     // 2. Header Track & 5-Step Algorithmic Roadmap Tracker Bar
     this.drawHeader(ctx, t, width, height);
 
-    // 3. Phase 1: The Three Legal Row Operations (0.0 to 18.0s)
-    if (t < 18.0) {
+    // 3. Phase 1: The Three Legal Row Operations (0.0 to 28.0s)
+    if (t < 28.0) {
       this.drawLegalOperations(ctx, t, width, height);
     }
-    // 4. Phase 2: Systematic Elimination Sequence with Think Moments (18.0 to 98.0s)
-    else if (t < 98.0) {
+    // 4. Phase 2: Systematic Elimination Sequence with Think Moments (28.0 to 116.5s)
+    else if (t < 116.5) {
       this.drawEliminationSteps(ctx, t, width, height);
     }
-    // 5. Phase 3: Sequential Back-Substitution (98.0 to 114.0s)
-    else if (t < 114.0) {
+    // 5. Phase 3: Sequential Back-Substitution (116.5 to 147.0s)
+    else {
       this.drawSequentialBackSub(ctx, t, width, height);
     }
-    // 6. Phase 4: Final Verification Against Cafeteria Receipts (114.0 to 120.0s)
-    else {
-      this.drawReceiptVerification(ctx, t, width, height);
-    }
 
-    // 7. Crossfade transition to Scene 6 (118.5 to 120.0s)
-    if (t >= 118.5) {
-      const dissolve = (t - 118.5) / 1.5;
+    // 6. Crossfade transition to Scene 6 (145.5 to 147.0s)
+    if (t >= 145.5) {
+      const dissolve = (t - 145.5) / 1.5;
       ctx.fillStyle = `rgba(4, 7, 20, ${dissolve * 0.85})`;
       ctx.fillRect(0, 0, width, height);
     }
@@ -288,13 +284,36 @@ class Scene5Elimination {
   }
 
   getStepState(t) {
-    // Step 1: Pivot 1 & Eliminate R2 (18.0 to 42.0s)
-    if (t < 42.0) {
-      const stepT = t - 18.0;
-      const isThinking = stepT < 5.5; // First 5.5s is Think Moment 1 (pause 2.5s)
-      const thinkProgress = Math.min(1.0, stepT / 2.5);
-      const isRevealed = stepT >= 2.5;
-      const pAnim = Math.min(1.0, Math.max(0, (stepT - 5.5) / 2.5));
+    // Objective Phase before Step 1 (28.0 to 41.5s)
+    if (t < 41.5) {
+      return {
+        stepNum: 0,
+        stepName: 'THE MAIN OBJECTIVE: CREATE AN UPPER TRIANGULAR MATRIX',
+        isThinking: false,
+        thinkProgress: 1.0,
+        isRevealed: true,
+        op: 'AIM: BUILD A STAIRCASE OF ZEROS BENEATH PIVOTS',
+        whyText: 'Our main objective is to create zeros below the pivots, gradually transforming the matrix into upper triangular form.',
+        arithmetic: 'Row Echelon Form: all entries below the main diagonal become 0.',
+        progressNote: 'Once we reach this triangular form, solving the system becomes effortless!',
+        matrix: [
+          [1, 1, 0, 5],
+          [1, 0, 1, 8],
+          [0, 1, 1, 7]
+        ],
+        pivot: [0, 0],
+        target: [1, 0],
+        zeroCreated: null,
+        echelon: false
+      };
+    }
+    // Step 1: Pivot 1 & Eliminate R2 (41.5 to 62.5s)
+    if (t < 62.5) {
+      const stepT = t - 41.5;
+      const isThinking = stepT < 15.0; // Think Moment 1 (pause 51.5s to 54.0s = stepT 10.0 to 12.5s)
+      const thinkProgress = Math.min(1.0, Math.max(0, (stepT - 10.0) / 2.5));
+      const isRevealed = stepT >= 12.5;
+      const pAnim = Math.min(1.0, Math.max(0, (stepT - 12.5) / 2.5));
 
       return {
         stepNum: 1,
@@ -320,13 +339,13 @@ class Scene5Elimination {
         echelon: false
       };
     }
-    // Step 2: Normalize Pivot 2 (42.0 to 62.0s)
-    if (t < 62.0) {
-      const stepT = t - 42.0;
-      const isThinking = stepT < 5.5; // Think Moment 2
-      const thinkProgress = Math.min(1.0, stepT / 2.5);
-      const isRevealed = stepT >= 2.5;
-      const pAnim = Math.min(1.0, Math.max(0, (stepT - 5.5) / 2.5));
+    // Step 2: Normalize Pivot 2 (62.5 to 79.0s)
+    if (t < 79.0) {
+      const stepT = t - 62.5;
+      const isThinking = stepT < 6.5; // Think Moment 2
+      const thinkProgress = Math.min(1.0, Math.max(0, (stepT - 3.5) / 2.5));
+      const isRevealed = stepT >= 6.0;
+      const pAnim = Math.min(1.0, Math.max(0, (stepT - 6.5) / 2.5));
 
       return {
         stepNum: 2,
@@ -352,13 +371,13 @@ class Scene5Elimination {
         echelon: false
       };
     }
-    // Step 3: Eliminate Below Pivot 2 (62.0 to 86.0s)
-    if (t < 86.0) {
-      const stepT = t - 62.0;
-      const isThinking = stepT < 5.5; // Think Moment 3
-      const thinkProgress = Math.min(1.0, stepT / 2.5);
-      const isRevealed = stepT >= 2.5;
-      const pAnim = Math.min(1.0, Math.max(0, (stepT - 5.5) / 2.5));
+    // Step 3: Eliminate Below Pivot 2 (79.0 to 94.0s)
+    if (t < 94.0) {
+      const stepT = t - 79.0;
+      const isThinking = stepT < 6.5; // Think Moment 3
+      const thinkProgress = Math.min(1.0, Math.max(0, (stepT - 3.5) / 2.5));
+      const isRevealed = stepT >= 6.0;
+      const pAnim = Math.min(1.0, Math.max(0, (stepT - 6.5) / 2.5));
 
       return {
         stepNum: 3,
@@ -384,8 +403,8 @@ class Scene5Elimination {
         echelon: false
       };
     }
-    // Step 4: Scale Row 3 to Achieve REF (86.0 to 98.0s)
-    const stepT = t - 86.0;
+    // Step 4: Scale Row 3 to Achieve REF (94.0 to 116.5s)
+    const stepT = t - 94.0;
     const pAnim = Math.min(1.0, stepT / 2.5);
 
     return {
@@ -395,7 +414,7 @@ class Scene5Elimination {
       thinkProgress: 1.0,
       isRevealed: true,
       op: 'R₃  ⟵  (1/2) · R₃',
-      whyText: 'Row Echelon Form achieved! Notice the staircase: the bottom row directly isolates 1z = 5 ⟹ Sandwich = ₹5!',
+      whyText: 'Row Echelon Form achieved! Notice what we have achieved: instead of dealing with all 3 unknowns, we reduced them step by step.',
       arithmetic: '[0,   0,   2/2   |   10/2]   =   [0,   0,   1   |   5]   ⟹   z = 5',
       progressNote: 'Triangular Staircase Formed! The system is now untangled and ready for Back-Substitution.',
       matrix: [
@@ -669,20 +688,21 @@ class Scene5Elimination {
   }
 
   drawSequentialBackSub(ctx, t, w, h) {
-    // 98.0 to 114.0s (16s): Sequential Back-Substitution
-    const subT = t - 98.0;
+    // 116.5 to 147.0s (30.5s): Sequential Back-Substitution
+    const subT = t - 116.5;
 
     // Sub-stage breakdown:
-    // 0.0 to 5.0s:  Solve z from Row 3 (Bottom row is easiest!)
-    // 5.0 to 10.5s: Substitute z into Row 2 to solve y
-    // 10.5 to 16.0s: Substitute y into Row 1 to solve x
-    const isSolvingZ = subT < 5.0;
-    const isSolvingY = subT >= 5.0 && subT < 10.5;
-    const isSolvingX = subT >= 10.5;
+    // 0.0 to 9.5s:   Solve z from Row 3 (Bottom row is easiest!)
+    // 9.5 to 17.0s:  Substitute z into Row 2 to solve y
+    // 17.0 to 24.0s: Substitute y into Row 1 to solve x
+    // 24.0 to 30.5s: Solution summary (3, 2, 5)
+    const isSolvingZ = subT < 9.5;
+    const isSolvingY = subT >= 9.5 && subT < 17.0;
+    const isSolvingX = subT >= 17.0;
 
     const zSolved = true;
-    const ySolved = subT >= 5.0;
-    const xSolved = subT >= 10.5;
+    const ySolved = subT >= 9.5;
+    const xSolved = subT >= 17.0;
 
     // Spacious Container: 1580px x 680px
     const cardW = 1580;

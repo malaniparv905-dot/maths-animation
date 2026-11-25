@@ -11,12 +11,18 @@ A complete, timeline-based mathematical animation and educational master film ex
 
 ## 📽️ Submission Deliverables
 
-1. **Final Rendered MP4 Video**:
-   * File: [`gaussian_elimination_cinematic_explainer.mp4`](gaussian_elimination_cinematic_explainer.mp4)
+1. **Final Rendered Master MP4 Video (Enhanced Voice & Synced Audio)**:
+   * Master Video File: [`FINAL_GAUSSIAN_ELIMINATION.mp4`](FINAL_GAUSSIAN_ELIMINATION.mp4)
+   * Original Ambient-Only Video: [`gaussian_elimination_cinematic_explainer.mp4`](gaussian_elimination_cinematic_explainer.mp4)
    * Duration: **`05:00.00` (Exactly 300.00 seconds / 7,200 frames @ 24 fps)** (strictly $\le 5\text{m } 15\text{s}$)
    * Resolution: **1920 × 1080 (1080p Full HD, 16:9 widescreen)**
-   * Audio: Mild neoclassical felt-piano and cello chamber score (`assets/cinematic_ambient_score.wav` normalized to -22 dB LUFS)
-2. **Complete Animation Source Code & Editable Project Files**:
+   * Audio Track: Studio-enhanced natural voice narration paired with subtle sidechain-ducked ambient neoclassical score (-18.1 LUFS integrated, -5.6 dBFS true peak headroom).
+2. **Audio Mastering & Voice Synchronization Pipeline**:
+   * Processing Script: [`sync_audio.py`](sync_audio.py)
+   * Enhanced Clean Voice Track: [`voice_enhanced.wav`](voice_enhanced.wav) (FFT de-noising, 3-band parametric EQ, gentle compression, de-essing, loudnorm)
+   * Master Stereo Audio Mix: [`final_audio_mix.wav`](final_audio_mix.wav)
+   * Comprehensive Audio Engineering Report: [`audio_sync_report.md`](audio_sync_report.md)
+3. **Complete Animation Source Code & Editable Project Files**:
    * Animation Engine: [`src/`](src/)
      * `scene1_mystery.js`: Cafeteria Mystery & Real-World Pricing
      * `scene2_why_elimination_fails.js`: Why High-School Elimination Breaks Down ($n \ge 3$)
