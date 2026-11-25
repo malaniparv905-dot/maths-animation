@@ -4,3 +4,4 @@ output/*.mp4
 *.log
 scratch/
 voice_synced.wav
+backup_originals/
